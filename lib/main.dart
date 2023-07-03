@@ -2,39 +2,47 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class ImageFilteredExample extends StatefulWidget {
-  const ImageFilteredExample({super.key});
-
-  @override
-  _ImageFilteredExampleState createState() => _ImageFilteredExampleState();
+void main() {
+  runApp(MaterialApp(
+    home: _ImageFiltererState(),
+  ));
 }
 
-class _ImageFilteredExampleState extends State<ImageFilteredExample> {
+class _ImageFiltererState extends StatefulWidget {
+  const _ImageFiltererState({super.key});
+
+  @override
+  __ImageFiltererStateState createState() => __ImageFiltererStateState();
+}
+
+class __ImageFiltererStateState extends State<_ImageFiltererState> {
   double _sigmaX = 0, _sigmaY = 0;
   double _rotZ = 0;
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(4),
-      children: [
-        ImageFiltered(
-          // Compose two image filters: result = outer(inner(source)).
-          // ImageFilter.compose(...)
-          // ! -- ImageFilter.compose Doesn't work??
-          // ! https://dartpad.dev/?id=a39eeefa873b62f63e4f3516c2d04b09
-          imageFilter: ImageFilter.blur(sigmaX: _sigmaX, sigmaY: _sigmaY),
-          child: Image.asset('images/friend.png'),
-        ),
-        ImageFiltered(
-          imageFilter: ImageFilter.matrix(Matrix4.rotationZ(_rotZ).storage),
-          child: const Text(
-            'Not only can images be "filtered", in fact any widget '
-            'can be placed under ImageFiltered!',
+    return Scaffold(
+      body: ListView(
+        padding: const EdgeInsets.all(4),
+        children: [
+          ImageFiltered(
+            // Compose two image filters: result = outer(inner(source)).
+            // ImageFilter.compose(...)
+            // ! -- ImageFilter.compose Doesn't work??
+            // ! https://dartpad.dev/?id=a39eeefa873b62f63e4f3516c2d04b09
+            imageFilter: ImageFilter.blur(sigmaX: _sigmaX, sigmaY: _sigmaY),
+            child: Image.asset('images/friends.png'),
           ),
-        ),
-        const Divider(),
-        ..._controlWidgets(),
-      ],
+          ImageFiltered(
+            imageFilter: ImageFilter.matrix(Matrix4.rotationZ(_rotZ).storage),
+            child: const Text(
+              'Not only can images be "filtered", in fact any widget '
+              'can be placed under ImageFiltered!',
+            ),
+          ),
+          const Divider(),
+          ..._controlWidgets(),
+        ],
+      ),
     );
   }
 
@@ -62,6 +70,7 @@ class _ImageFilteredExampleState extends State<ImageFilteredExample> {
           Expanded(
             child: Slider(
               max: 20,
+              // min: 20,
               value: _sigmaY,
               onChanged: (val) {
                 setState(() => this._sigmaY = val);
